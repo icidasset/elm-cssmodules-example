@@ -1,7 +1,7 @@
 {
-  "name": "quotes",
+  "name": "elm-cssmodules-example",
   "version": "1.0.0",
-  "description": "Quotes",
+  "description": "",
   "main": "config/index.js",
   "scripts": {
     "build-css": "node config/css.js",
@@ -14,16 +14,8 @@
     "dev": "npm run clean && npm run build-dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/icidasset/quotes.git"
-  },
   "author": "icid.asset@gmail.com",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/icidasset/quotes/issues"
-  },
-  "homepage": "https://github.com/icidasset/quotes#readme",
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^6.4.0",
