@@ -1,0 +1,36 @@
+{
+  "name": "quotes",
+  "version": "1.0.0",
+  "description": "Quotes",
+  "main": "config/index.js",
+  "scripts": {
+    "build-css": "node config/css.js",
+    "build-elm": "elm-make app/Main.elm --output ./build/application.js --yes",
+    "build-html": "node config/html.js",
+
+    "build-dev": "npm run build-elm && npm run build-css && npm run build-html",
+
+    "clean": "rm -rf ./build",
+    "dev": "npm run clean && npm run build-dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icidasset/quotes.git"
+  },
+  "author": "icid.asset@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/icidasset/quotes/issues"
+  },
+  "homepage": "https://github.com/icidasset/quotes#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "autoprefixer": "^6.4.0",
+    "mkdirp": "^0.5.1",
+    "postcss": "^5.1.2",
+    "postcss-modules": "^0.5.2",
+    "postcss-modules-values": "^1.2.2",
+    "static-base": "^0.4.1"
+  }
+}
