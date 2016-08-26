@@ -62,6 +62,10 @@ view model =
     [ text "Example" ]
 
 
+
+-- UTILS
+
+
 cssmod : String -> Model -> Attribute Msg
 cssmod modName model =
   let
