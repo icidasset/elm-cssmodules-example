@@ -7,7 +7,7 @@
     "build-elm": "elm-make app/Main.elm --output ./build/application.js --yes",
     "build-dev": "node config/index.js",
     "clean": "rm -rf ./build",
-    "dev": "npm run clean && npm run build-elm && npm run build-dev -- --watch --serve",
+    "dev": "npm run clean && npm run build-elm && npm run build-dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "icid.asset@gmail.com",
@@ -15,8 +15,11 @@
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^6.4.0",
+    "lodash": "^4.15.0",
     "mkdirp": "^0.5.1",
+    "mkdirp-promise": "^3.0.1",
     "mustache": "^2.2.1",
+    "mz": "^2.4.0",
     "postcss": "^5.1.2",
     "postcss-modules": "^0.5.2",
     "postcss-modules-values": "^1.2.2",

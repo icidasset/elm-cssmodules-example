@@ -1,50 +1,41 @@
 const { basename, join, resolve } = require('path');
-const { buildDefinition, buildDependencies } = require('static-base/lib/dictionary');
-const fs = require('fs');
-const mkdirp = require('mkdirp');
+const { def, extend } = require('../utils');
+const postcss = require('postcss');
 
 
-const root = resolve(__dirname, '../../');
+const process = (files) => files.map(file => {
+  var cssmodules;
 
-
-const processor = require('postcss')([
-
-  require('autoprefixer'),
-  require('postcss-modules')({
-    getJSON: function(csspath, obj) {
-      const name = basename(csspath, '.pcss');
-      const buildpath = join(root, 'build');
-      const jsonpath = join(buildpath, 'cssmodules.json');
-
-      mkdirp(buildpath, err => {
-        if (err) console.error(err);
-        else fs.writeFileSync(jsonpath, JSON.stringify(obj))
-      });
-    }
-  }),
-
-]);
+  return postcss([
+    require('autoprefixer'),
+    require('postcss-modules')({
+      getJSON: (_, obj) => cssmodules = obj
+    }),
+  ])
+  .process(file.content, { from: file.entirePath })
+  .then(result => extend(file, { content: result.css, cssmodules }));
+});
 
 
 module.exports = (files) => {
 
-  // process all css files
+  // process all css files and gather css-modules info
   return Promise.all(
-    files.map(file => {
-      return processor
-        .process(file.content, { from: file.entirePath })
-        .then(result => Object.assign({}, file, { content: result.css }));
-    })
+    process(files)
 
   // bundle all css files into one css file
   ).then(files => {
-    const content = files.reduce((acc, f) => acc + '\n' + f.content, '');
-    const deps = buildDependencies('', root);
-    const def = buildDefinition('application.css', deps);
+    const cssmodules = files.reduce(
+      (acc, f) => extend(acc, { [f.basename]: f.cssmodules }), {}
+    );
 
-    def.content = content;
+    const content = files.reduce(
+      (acc, f) => acc + '\n' + f.content, ''
+    );
 
-    return [def];
+    return [
+      extend(def('application.css', files[0]), { content, cssmodules })
+    ];
 
   });
 

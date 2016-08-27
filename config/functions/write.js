@@ -1,25 +1,18 @@
 const { join } = require('path');
-const fs = require('fs');
-const mkdirp = require('mkdirp');
+const fs = require('mz/fs');
+const mkdirp = require('mkdirp-promise/lib/node6');
 
 
-module.exports = (files, destination) => {
-  const promises = files.map(f => new Promise((resolve, reject) => {
-    const dir = join(f.root, destination, f.dirname);
+const map = (dest) => (file) => {
+  const dest_dir = join(file.root, dest, file.dirname);
+  const dest_path = join(dest_dir, `${file.basename}${file.extname}`)
 
-    // ensure the directory tree exists
-    mkdirp(dir, (err) => {
-      if (err) return reject(err);
+  mkdirp(dest_dir).then(() => (
+    fs.writeFile(dest_path, file.content, { encoding: 'utf-8' })
+  ));
 
-      // write to file
-      fs.writeFile(
-        join(dir, `${f.basename}${f.extname}`),
-        f.content,
-        { encoding: 'utf-8' },
-        (err) => err ? reject(err) : resolve(f)
-      )
-    });
-  }));
+  return file;
+};
 
-  return Promise.all(promises);
-}
+
+module.exports = (files, dest) => Promise.all(files.map( map(dest) ));

@@ -1,18 +1,23 @@
+const flatten = require('lodash/fp/flatten');
 const fs = require('fs');
 const Mustache = require('mustache');
+const { extend } = require('../utils');
 
 
-module.exports = (files, destination) => {
-  let css_modules;
+module.exports = (files, dest, cm) => {
+  const cssmodules = flatten(Object.keys(cm).map(k =>
+    Object.keys(cm[k]).map(
+      c => [`${k}.${c}`, cm[k][c]]
+    )
+  ));
 
-  css_modules = fs.readFileSync(`${destination}/cssmodules.json`, { encoding: 'utf-8' });
-  css_modules = JSON.parse(css_modules);
-  css_modules = Object.keys(css_modules).map(k => [k, css_modules[k]]);
-  css_modules = JSON.stringify(css_modules);
-
-  return files.map(file => Object.assign(
-    {},
+  return files.map(file => extend(
     file,
-    { content: Mustache.render(file.content, { css_modules }) }
+    {
+      content: Mustache.render(
+        file.content,
+        { cssmodules: JSON.stringify(cssmodules) }
+      )
+    }
   ));
 };

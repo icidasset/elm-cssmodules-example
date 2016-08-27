@@ -1,10 +1,8 @@
-const { buildDefinition } = require('static-base/lib/dictionary');
+const { def, extend } = require('../utils');
 
 
-module.exports = (files, newPath) => files.map(file => {
-  return Object.assign(
-    {},
-    file,
-    buildDefinition(newPath, file)
-  );
-});
+module.exports = (files, oldPath, newPath) => files.map(file => (
+  file.path === oldPath ?
+    extend(file, def(newPath, file)) :
+    file
+));

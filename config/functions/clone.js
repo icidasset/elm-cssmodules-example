@@ -1,7 +1,6 @@
 const rename = require('./rename');
 
 
-module.exports = (files, newPath) => {
-  const renamed = rename([files[0]], newPath);
-  return files.concat(renamed);
-};
+module.exports = (files, path, newPath) => files.concat(
+  rename(files, path, newPath)
+);

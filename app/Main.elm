@@ -20,12 +20,9 @@ type alias CSSModules = Dict String String
 
 init : Maybe CSSModulesFlag -> (Model, Cmd Msg)
 init args =
-  let
-    log = Debug.log "flags" args
-  in
-    case args of
-      Just cm -> { emptyModel | cssmodules = Dict.fromList(cm) } ! []
-      Nothing -> emptyModel ! []
+  case args of
+    Just cm -> { emptyModel | cssmodules = Dict.fromList(cm) } ! []
+    Nothing -> emptyModel ! []
 
 
 
@@ -56,21 +53,28 @@ update msg model = model ! []
 
 
 view : Model -> Html Msg
-view model =
+view model = baseView model (\className -> applyCSSModule className model)
+
+
+baseView : Model -> (String -> Attribute Msg) -> Html Msg
+baseView model cssmodule =
   div
-    [ cssmod "Main" model ]
-    [ text "Example" ]
+    [ cssmodule "Main.component" ]
+    [
+      div
+        [ cssmodule "Wrapper.component" ]
+        [ text "Example" ]
+    ]
 
 
 
 -- UTILS
 
 
-cssmod : String -> Model -> Attribute Msg
-cssmod modName model =
+applyCSSModule : String -> Model -> Attribute Msg
+applyCSSModule modName model =
   let
     className = Dict.get modName (model.cssmodules)
-
   in
     case className of
       Just cn -> class cn
