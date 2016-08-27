@@ -36,10 +36,7 @@ const sequence = (attr) => {
     )
     (`${attr.priv.sourceDirectory}/Main.mustache`, attr.priv.root);
 
-  return a.then((x) => {
-    // console.log(x);
-    return b(x);
-  });
+  return a.then(b);
 };
 
 

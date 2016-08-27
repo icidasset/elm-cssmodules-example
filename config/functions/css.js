@@ -3,6 +3,7 @@ const { def, extend } = require('../utils');
 const postcss = require('postcss');
 
 
+
 const process = (files) => files.map(file => {
   var cssmodules;
 
@@ -15,6 +16,7 @@ const process = (files) => files.map(file => {
   .process(file.content, { from: file.entirePath })
   .then(result => extend(file, { content: result.css, cssmodules }));
 });
+
 
 
 module.exports = (files) => {
