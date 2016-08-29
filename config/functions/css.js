@@ -1,5 +1,6 @@
 const { basename, join, resolve } = require('path');
-const { def, extend } = require('../utils');
+const { extend } = require('../utils');
+const { forkDefinition } = require('static-base-contrib/utils');
 const postcss = require('postcss');
 
 
@@ -36,7 +37,7 @@ module.exports = (files) => {
     );
 
     return [
-      extend(def('application.css', files[0]), { content, cssmodules })
+      extend(forkDefinition('application.css', files[0]), { content, cssmodules })
     ];
 
   });

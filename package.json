@@ -15,15 +15,14 @@
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^6.4.0",
+    "bluebird": "^3.4.3",
     "lodash": "^4.15.0",
-    "mkdirp": "^0.5.1",
-    "mkdirp-promise": "^3.0.1",
     "mustache": "^2.2.1",
-    "mz": "^2.4.0",
     "postcss": "^5.1.2",
     "postcss-modules": "^0.5.2",
     "postcss-modules-values": "^1.2.2",
-    "static-base": "^0.4.1",
-    "static-base-preset": "^0.2.2"
+    "static-base": "^1.0.1",
+    "static-base-contrib": "^1.0.2",
+    "static-base-preset": "^0.3.0"
   }
 }
