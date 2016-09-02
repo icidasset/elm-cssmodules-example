@@ -4,10 +4,9 @@
   "description": "",
   "main": "config/index.js",
   "scripts": {
-    "build-elm": "elm-make app/Main.elm --output ./build/application.js --yes",
     "build-dev": "node config/index.js",
     "clean": "rm -rf ./build",
-    "dev": "npm run clean && npm run build-elm && npm run build-dev",
+    "dev": "npm run clean && npm run build-dev -- --watch --serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "icid.asset@gmail.com",
@@ -16,13 +15,12 @@
   "devDependencies": {
     "autoprefixer": "^6.4.0",
     "bluebird": "^3.4.3",
-    "lodash": "^4.15.0",
     "mustache": "^2.2.1",
     "postcss": "^5.1.2",
     "postcss-modules": "^0.5.2",
     "postcss-modules-values": "^1.2.2",
     "static-base": "^1.0.1",
     "static-base-contrib": "^1.0.2",
-    "static-base-preset": "^0.3.0"
+    "static-base-preset": "^0.3.1"
   }
 }

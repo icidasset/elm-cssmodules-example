@@ -1,10 +1,12 @@
+import CSSModules
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.App as App
 import Html.Attributes exposing (..)
+import Json.Decode exposing (Decoder, dict, string)
 
 
-main : Program (Maybe CSSModulesFlag)
+main : Program (Maybe CSSModules.Flag)
 main =
   App.programWithFlags
     { init = init
@@ -14,34 +16,30 @@ main =
     }
 
 
-type alias CSSModulesFlag = List (String, String)
-type alias CSSModules = Dict String String
-
-
-init : Maybe CSSModulesFlag -> (Model, Cmd Msg)
-init args =
-  case args of
-    Just cm -> { emptyModel | cssmodules = Dict.fromList(cm) } ! []
-    Nothing -> emptyModel ! []
+init : Maybe CSSModules.Flag -> (Model, Cmd Msg)
+init odds = CSSModules.init odds initialModel ! []
 
 
 
 -- MODEL
 
 
--- The full application state of our app
-type alias Model =
-  { cssmodules : CSSModules }
+type alias Model = CSSModules.Model PrivateModel
+type alias PrivateModel =
+  { somethingElse : Bool
+  }
 
-emptyModel =
-  { cssmodules = Dict.empty }
+initialModel : Model
+initialModel =
+  { somethingElse = True
+  , cssmodules = Dict.empty
+  }
 
 
 
 -- UPDATE
 
 
--- These are the actions the user can perform
 type Msg = TODO
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -53,29 +51,14 @@ update msg model = model ! []
 
 
 view : Model -> Html Msg
-view model = baseView model (\className -> applyCSSModule className model)
-
-
-baseView : Model -> (String -> Attribute Msg) -> Html Msg
-baseView model cssmodule =
-  div
-    [ cssmodule "Main.component" ]
-    [
-      div
-        [ cssmodule "Wrapper.component" ]
-        [ text "Example" ]
-    ]
-
-
-
--- UTILS
-
-
-applyCSSModule : String -> Model -> Attribute Msg
-applyCSSModule modName model =
+view model =
   let
-    className = Dict.get modName (model.cssmodules)
+    cssmodule = (CSSModules.get model)
   in
-    case className of
-      Just cn -> class cn
-      Nothing -> class ""
+    div
+      [ cssmodule "Main.component" ]
+      [
+        div
+          [ cssmodule "Wrapper.component" ]
+          [ text "Example" ]
+      ]

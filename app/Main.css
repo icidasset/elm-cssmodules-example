@@ -1,4 +1,4 @@
-@value colors: "../lib/variables.pcss";
+@value colors: "../lib/variables.css";
 @value textColor from colors;
 
 

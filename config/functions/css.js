@@ -20,25 +20,29 @@ const process = (files) => files.map(file => {
 
 
 
-module.exports = (files) => {
+module.exports = function css(files) {
 
-  // process all css files and gather css-modules info
+  // process all css files & gather css-modules info
   return Promise.all(
     process(files)
 
-  // bundle all css files into one css file
+  // bundle all css files into one css file & store the css-modules info
   ).then(files => {
+    const def = forkDefinition('application.css', files[0]);
+    const content = files.reduce((acc, f) => `${acc}\n${f.content}`, ``);
     const cssmodules = files.reduce(
-      (acc, f) => extend(acc, { [f.basename]: f.cssmodules }), {}
+      (f_acc, f) => {
+        const f_cssmodules = Object.keys(f.cssmodules).reduce(
+          (c_acc, c) => extend(c_acc, { [`${f.basename}.${c}`]: f.cssmodules[c] }),
+          {}
+        );
+
+        return extend(f_acc, f_cssmodules);
+      },
+      {}
     );
 
-    const content = files.reduce(
-      (acc, f) => acc + '\n' + f.content, ''
-    );
-
-    return [
-      extend(forkDefinition('application.css', files[0]), { content, cssmodules })
-    ];
+    return [extend(def, { content, cssmodules })];
 
   });
 
